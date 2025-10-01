@@ -1,0 +1,55 @@
+<div
+  class="angular-editor"
+  [style.width]="config().width"
+  [style.minWidth]="config().minWidth"
+  [ngClass]="{
+    bottom: config().toolbarPosition === 'bottom',
+  }"
+>
+  <app-editor-toolbar
+    #editorToolbar
+    [id]="id()"
+    [showToolbar]="config().showToolbar !== undefined ? config().showToolbar : true"
+    [fonts]="getFonts()"
+    [customClasses]="config().customClasses"
+    [defaultFontName]="config().defaultFontName"
+    [defaultFontSize]="config().defaultFontSize"
+    [disabled]="disabled"
+    [isVertical]="config().vertical"
+    (execute)="executeCommand($event)"
+    class="w-full"
+  >
+    <ng-container
+      [ngTemplateOutlet]="customButtonsTemplateRef"
+      [ngTemplateOutletContext]="{ executeCommandFn: this.executeCommandFn }"
+    >
+    </ng-container>
+  </app-editor-toolbar>
+
+  <div class="angular-editor-wrapper w-full" #editorWrapper>
+    <div
+      #editor
+      pTextarea
+      [class]="'angular-editor-textarea w-full ' + (disabled ? ' disabled-text-editor' : '')"
+      [attr.contenteditable]="config().editable && !disabled"
+      [attr.tabindex]="disabled ? -1 : tabIndex"
+      [attr.translate]="config().translate"
+      [attr.spellcheck]="config().spellcheck"
+      [style.height]="config().height"
+      [style.minHeight]="config().minHeight"
+      [style.maxHeight]="config().maxHeight"
+      [style.outline]="config().outline === false ? 'none' : undefined"
+      (input)="onContentChange($event.target)"
+      (focus)="onTextAreaFocus($event)"
+      (blur)="onTextAreaBlur($event)"
+      (click)="exec()"
+      (keyup)="exec()"
+      (paste)="onPaste($event)"
+    ></div>
+    @if (!disabled) {
+      <span class="angular-editor-placeholder w-full">{{
+        placeholder() || config()['placeholder']
+      }}</span>
+    }
+  </div>
+</div>

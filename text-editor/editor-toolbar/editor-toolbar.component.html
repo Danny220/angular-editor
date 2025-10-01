@@ -1,0 +1,116 @@
+@if (showToolbar()) {
+  <div class="angular-editor-toolbar" [class.is-vertical]="isVertical()">
+    <div class="toolbar-row-main">
+      <div toolbarSet>
+        <p-button
+          title="Undo"
+          [disabled]="disabled()"
+          icon="fa-solid fa-rotate-left"
+          (onClick)="triggerCommand('undo')"
+        ></p-button>
+        <p-button
+          title="Redo"
+          [disabled]="disabled()"
+          icon="fa-solid fa-rotate-right"
+          (onClick)="triggerCommand('redo')"
+        ></p-button>
+      </div>
+      @if (isVertical()) {
+        <div toolbarSet>
+          <p-button
+            [id]="'toggleEditorMode-' + id()"
+            icon="pi pi-code"
+            title="HTML Code"
+            (onClick)="triggerCommand('toggleEditorMode')"
+            [disabled]="disabled()"
+          ></p-button>
+        </div>
+      }
+    </div>
+
+    <div class="toolbar-row-secondary">
+      @if (!htmlMode) {
+        <div toolbarSet>
+          <p-select
+            [options]="headings"
+            [(ngModel)]="block"
+            (onChange)="triggerCommand(block)"
+            [disabled]="disabled()"
+            tabindex="-1"
+            placeholder="Heading"
+          ></p-select>
+        </div>
+      }
+      <div toolbarSet>
+        <p-button
+          [id]="'bold-' + id()"
+          title="Bold"
+          icon="fa-solid fa-bold"
+          (onClick)="triggerCommand('bold')"
+          [disabled]="disabled()"
+          [hidden]="htmlMode"
+        ></p-button>
+        <p-button
+          [id]="'italic-' + id()"
+          icon="fa-solid fa-italic"
+          title="Italic"
+          (onClick)="triggerCommand('italic')"
+          [disabled]="disabled()"
+          [hidden]="htmlMode"
+        ></p-button>
+        <p-button
+          [id]="'underline-' + id()"
+          title="Underline"
+          icon="fa-solid fa-underline"
+          (onClick)="triggerCommand('underline')"
+          [disabled]="disabled()"
+          [hidden]="htmlMode"
+        ></p-button>
+      </div>
+      @if (customClasses()) {
+        <div toolbarSet>
+          <p-select
+            class="select-custom-style"
+            [options]="customClassList()"
+            [(ngModel)]="customClassId"
+            (onChange)="setCustomClass(customClassId)"
+            [disabled]="disabled()"
+            [hidden]="htmlMode"
+            tabindex="-1"
+          ></p-select>
+        </div>
+      }
+      <div toolbarSet>
+        <p-button
+          [id]="'insertUnorderedList-' + id()"
+          icon="fa-solid fa-list-ul"
+          title="Unordered List"
+          (onClick)="triggerCommand('insertUnorderedList')"
+          [disabled]="disabled()"
+          [hidden]="htmlMode"
+        ></p-button>
+        <p-button
+          [id]="'insertOrderedList-' + id()"
+          icon="fa-solid fa-list-ol"
+          title="Ordered List"
+          (onClick)="triggerCommand('insertOrderedList')"
+          [disabled]="disabled()"
+          [hidden]="htmlMode"
+        ></p-button>
+      </div>
+      @if (!isVertical()) {
+        <div toolbarSet class="ml-auto">
+          <p-button
+            [id]="'toggleEditorMode-' + id()"
+            icon="pi pi-code"
+            title="HTML Code"
+            (onClick)="triggerCommand('toggleEditorMode')"
+            [disabled]="disabled()"
+          ></p-button>
+        </div>
+      }
+    </div>
+
+    <ng-content></ng-content>
+  </div>
+}
